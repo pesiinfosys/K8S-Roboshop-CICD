@@ -1,2 +1,2 @@
 statefulset:
-  imageVersion: 1.0.0
+  imageVersion: v1.0.0
