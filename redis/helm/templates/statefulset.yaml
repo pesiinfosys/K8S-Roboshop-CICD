@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: roboshop
+  labels:
+    app: redis
+    tier: db
+    project: roboshop
+spec:
+  selector:
+    matchLabels:
+      app: redis
+      tier: db
+      project: roboshop
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+        tier: db
+        project: roboshop
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        volumeMounts:
+        - name: redis
+          mountPath: /data
+  # this is PVC directly.
+  volumeClaimTemplates:
+  - metadata:
+      name: redis
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "roboshop-ebc-sc"
+      resources:
+        requests:
+          storage: 5Gi

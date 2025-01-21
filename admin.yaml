@@ -1,0 +1,21 @@
+---
+# Creating Storage Class Is an admin task
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: roboshop-ebc-sc
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+  encrypted: "true"
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
+
+---
+# Creating Namespace is an admin task
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: roboshop
+
