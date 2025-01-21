@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+    tier: db
+    project: roboshop
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+      tier: db
+      project: roboshop
+  # serviceName: "mysql"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql
+        tier: db
+        project: roboshop
+    spec:
+      containers:
+      - name: mysql
+        image: "joindevops/mysql:{{ .Values.statefulset.imageVersion }}"
+        envFrom:
+        envFrom:
+        - secretRef:
+            name: mysql
+        - configMapRef:
+            name: mysql
+        volumeMounts:
+        - name: mysql
+          mountPath: /var/lib/mysql
+  # this is PVC directly.
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "roboshop-ebc-sc"
+      resources:
+        requests:
+          storage: 5Gi
