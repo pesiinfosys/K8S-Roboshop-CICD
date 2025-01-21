@@ -1,42 +1,37 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql
+  name: rabbitmq
+  namespace: roboshop
   labels:
-    app: mysql
+    app: rabbitmq
     tier: db
     project: roboshop
 spec:
   selector:
     matchLabels:
-      app: mysql
+      app: rabbitmq
       tier: db
       project: roboshop
-  # serviceName: "mysql"
+  serviceName: "rabbitmq"
   replicas: 1
   template:
     metadata:
       labels:
-        app: mysql
+        app: rabbitmq
         tier: db
         project: roboshop
     spec:
       containers:
-      - name: mysql
-        image: "joindevops/mysql:{{ .Values.statefulset.imageVersion }}"
-        envFrom:
-        envFrom:
-        - secretRef:
-            name: mysql
-        - configMapRef:
-            name: mysql
+      - name: rabbitmq
+        image: rabbitmq
         volumeMounts:
-        - name: mysql
-          mountPath: /var/lib/mysql
+        - name: rabbitmq
+          mountPath: /var/lib/rabbitmq
   # this is PVC directly.
   volumeClaimTemplates:
   - metadata:
-      name: mysql
+      name: rabbitmq
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: "roboshop-ebc-sc"
